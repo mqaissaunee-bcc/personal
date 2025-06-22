@@ -185,9 +185,11 @@
         .checklist-item {
             display: flex;
             align-items: center;
-            padding: 10px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #f0f0f0;
             transition: background-color 0.2s;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .checklist-item:last-child {
@@ -226,6 +228,49 @@
         .item-text:focus {
             outline: 2px solid #4facfe;
             border-radius: 4px;
+        }
+
+        .item-quantity {
+            font-weight: 600;
+            color: #4facfe;
+            margin-left: 8px;
+            font-size: 14px;
+        }
+
+        .multiplier-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .multiplier-input {
+            width: 40px;
+            padding: 2px 4px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .multiplier-label {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .multiplier-toggle {
+            font-size: 12px;
+            padding: 2px 6px;
+            border: 1px solid #4facfe;
+            background: white;
+            color: #4facfe;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .multiplier-toggle:hover {
+            background: #4facfe;
+            color: white;
         }
 
         .item-actions {
@@ -334,6 +379,22 @@
                 flex-direction: column;
                 text-align: center;
             }
+            
+            .checklist-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .multiplier-controls {
+                align-self: stretch;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+            
+            .item-actions {
+                align-self: flex-end;
+            }
         }
     </style>
 </head>
@@ -399,52 +460,52 @@
         // In-memory storage for the checklist data
         let checklistData = {
             "Clothing": [
-                "Underwear (per day + extras)",
-                "Socks (per day + extras)",
-                "Shirts/tops",
-                "Pants/shorts",
-                "Pajamas",
-                "Weather-appropriate outerwear",
-                "Comfortable walking shoes",
-                "Dress shoes (if needed)"
+                { text: "Underwear", completed: false, multiplier: { perDay: 1, extra: 2 } },
+                { text: "Socks", completed: false, multiplier: { perDay: 1, extra: 2 } },
+                { text: "Shirts/tops", completed: false, multiplier: { perDay: 1, extra: 1 } },
+                { text: "Pants/shorts", completed: false, multiplier: { perDay: 1, extra: 0 } },
+                { text: "Pajamas", completed: false },
+                { text: "Weather-appropriate outerwear", completed: false },
+                { text: "Comfortable walking shoes", completed: false },
+                { text: "Dress shoes (if needed)", completed: false }
             ],
             "Toiletries": [
-                "Toothbrush and toothpaste",
-                "Shampoo and conditioner",
-                "Body wash/soap",
-                "Deodorant",
-                "Razor and shaving cream",
-                "Medications",
-                "Sunscreen",
-                "Face wash and moisturizer"
+                { text: "Toothbrush and toothpaste", completed: false },
+                { text: "Shampoo and conditioner", completed: false },
+                { text: "Body wash/soap", completed: false },
+                { text: "Deodorant", completed: false },
+                { text: "Razor and shaving cream", completed: false },
+                { text: "Medications", completed: false, multiplier: { perDay: 1, extra: 2 } },
+                { text: "Sunscreen", completed: false },
+                { text: "Face wash and moisturizer", completed: false }
             ],
             "Electronics": [
-                "Phone charger",
-                "Camera and charger",
-                "Laptop/tablet and charger",
-                "Power bank",
-                "Headphones",
-                "Travel adapter (if international)",
-                "Cables and dongles"
+                { text: "Phone charger", completed: false },
+                { text: "Camera and charger", completed: false },
+                { text: "Laptop/tablet and charger", completed: false },
+                { text: "Power bank", completed: false },
+                { text: "Headphones", completed: false },
+                { text: "Travel adapter (if international)", completed: false },
+                { text: "Cables and dongles", completed: false }
             ],
             "Documents": [
-                "Passport/ID",
-                "Travel tickets",
-                "Hotel confirmations",
-                "Travel insurance documents",
-                "Emergency contact information",
-                "Copies of important documents",
-                "Credit cards and cash"
+                { text: "Passport/ID", completed: false },
+                { text: "Travel tickets", completed: false },
+                { text: "Hotel confirmations", completed: false },
+                { text: "Travel insurance documents", completed: false },
+                { text: "Emergency contact information", completed: false },
+                { text: "Copies of important documents", completed: false },
+                { text: "Credit cards and cash", completed: false }
             ],
             "Essentials": [
-                "Luggage/suitcase",
-                "Day pack/purse",
-                "Snacks for travel",
-                "Water bottle",
-                "Entertainment (books, games)",
-                "First aid kit",
-                "Hand sanitizer",
-                "Tissues"
+                { text: "Luggage/suitcase", completed: false },
+                { text: "Day pack/purse", completed: false },
+                { text: "Snacks for travel", completed: false },
+                { text: "Water bottle", completed: false },
+                { text: "Entertainment (books, games)", completed: false },
+                { text: "First aid kit", completed: false },
+                { text: "Hand sanitizer", completed: false },
+                { text: "Tissues", completed: false }
             ]
         };
 
@@ -458,21 +519,49 @@
         }
 
         function updateTripSummary() {
-            const startDate = document.getElementById('startDate').value;
-            const tripDays = document.getElementById('tripDays').value;
+            const startDateInput = document.getElementById('startDate');
+            const tripDaysInput = document.getElementById('tripDays');
+            const startDate = startDateInput.value;
+            const tripDays = parseInt(tripDaysInput.value);
+            
+            // Validate inputs
+            if (!tripDays || tripDays < 1) {
+                tripDaysInput.value = 1;
+                return;
+            }
+            
+            if (tripDays > 365) {
+                tripDaysInput.value = 365;
+                return;
+            }
             
             if (startDate && tripDays) {
-                const start = new Date(startDate);
-                const end = new Date(start);
-                end.setDate(start.getDate() + parseInt(tripDays) - 1);
-                
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const startFormatted = start.toLocaleDateString('en-US', options);
-                const endFormatted = end.toLocaleDateString('en-US', options);
-                
-                document.getElementById('tripSummary').innerHTML = `
-                    <p><strong>Trip Duration:</strong> ${startFormatted} to ${endFormatted} (${tripDays} days)</p>
-                `;
+                try {
+                    // Parse date components to avoid timezone issues
+                    const [year, month, day] = startDate.split('-').map(num => parseInt(num));
+                    const start = new Date(year, month - 1, day); // month is 0-based
+                    const end = new Date(year, month - 1, day + tripDays - 1);
+                    
+                    // Check if dates are valid
+                    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+                        document.getElementById('tripSummary').innerHTML = '<p style="color: red;">Invalid date selected</p>';
+                        return;
+                    }
+                    
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    const startFormatted = start.toLocaleDateString('en-US', options);
+                    const endFormatted = end.toLocaleDateString('en-US', options);
+                    
+                    document.getElementById('tripSummary').innerHTML = `
+                        <p><strong>Trip Duration:</strong> ${startFormatted} to ${endFormatted} (${tripDays} day${tripDays === 1 ? '' : 's'})</p>
+                    `;
+                    
+                    // Update quantities when trip duration changes
+                    updateStats();
+                } catch (error) {
+                    document.getElementById('tripSummary').innerHTML = '<p style="color: red;">Error calculating trip dates</p>';
+                    console.error('Date calculation error:', error);
+                }
             }
         }
 
@@ -486,10 +575,21 @@
                 
                 const categoryHeader = document.createElement('div');
                 categoryHeader.className = 'category-header';
-                categoryHeader.innerHTML = `
-                    <span>📋 ${category}</span>
-                    <button class="btn-small btn-danger" onclick="removeCategory('${category}')">Remove Category</button>
-                `;
+                
+                const categorySpan = document.createElement('span');
+                if (category === 'Clothing') {
+                    categorySpan.innerHTML = `📋 ${category} <small style="font-weight: normal; color: #666;">(excludes travel day)</small>`;
+                } else {
+                    categorySpan.textContent = `📋 ${category}`;
+                }
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn-small btn-danger';
+                removeBtn.textContent = 'Remove Category';
+                removeBtn.addEventListener('click', () => removeCategory(category));
+                
+                categoryHeader.appendChild(categorySpan);
+                categoryHeader.appendChild(removeBtn);
                 
                 const categoryItems = document.createElement('div');
                 categoryItems.className = 'category-items';
@@ -501,27 +601,108 @@
                         itemDiv.classList.add('completed');
                     }
                     
-                    itemDiv.innerHTML = `
-                        <input type="checkbox" ${item.completed ? 'checked' : ''} 
-                               onchange="toggleItem('${category}', ${index})">
-                        <input type="text" class="item-text" value="${item.text || item}" 
-                               onblur="updateItemText('${category}', ${index}, this.value)"
-                               onkeypress="if(event.key==='Enter') this.blur()">
-                        <div class="item-actions">
-                            <button class="btn-small btn-danger" onclick="removeItem('${category}', ${index})">✕</button>
-                        </div>
-                    `;
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = item.completed;
+                    checkbox.addEventListener('change', (e) => toggleItem(category, index, e.target.checked));
                     
+                    const textInput = document.createElement('input');
+                    textInput.type = 'text';
+                    textInput.className = 'item-text';
+                    textInput.value = item.text;
+                    textInput.addEventListener('blur', (e) => updateItemText(category, index, e.target.value));
+                    textInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') e.target.blur();
+                    });
+                    
+                    itemDiv.appendChild(checkbox);
+                    itemDiv.appendChild(textInput);
+                    
+                    // Add quantity display if item has multiplier
+                    if (item.multiplier) {
+                        const quantity = calculateQuantity(item, category);
+                        const quantitySpan = document.createElement('span');
+                        quantitySpan.className = 'item-quantity';
+                        quantitySpan.textContent = `(${quantity} needed)`;
+                        itemDiv.appendChild(quantitySpan);
+                    }
+                    
+                    // Add multiplier controls
+                    const multiplierDiv = document.createElement('div');
+                    multiplierDiv.className = 'multiplier-controls';
+                    
+                    if (item.multiplier) {
+                        const perDayLabel = document.createElement('span');
+                        perDayLabel.className = 'multiplier-label';
+                        perDayLabel.textContent = '/day:';
+                        
+                        const perDayInput = document.createElement('input');
+                        perDayInput.type = 'number';
+                        perDayInput.className = 'multiplier-input';
+                        perDayInput.min = '0';
+                        perDayInput.value = item.multiplier.perDay;
+                        perDayInput.addEventListener('change', (e) => 
+                            updateMultiplier(category, index, e.target.value, item.multiplier.extra)
+                        );
+                        
+                        const extraLabel = document.createElement('span');
+                        extraLabel.className = 'multiplier-label';
+                        extraLabel.textContent = '+extra:';
+                        
+                        const extraInput = document.createElement('input');
+                        extraInput.type = 'number';
+                        extraInput.className = 'multiplier-input';
+                        extraInput.min = '0';
+                        extraInput.value = item.multiplier.extra;
+                        extraInput.addEventListener('change', (e) => 
+                            updateMultiplier(category, index, item.multiplier.perDay, e.target.value)
+                        );
+                        
+                        multiplierDiv.appendChild(perDayLabel);
+                        multiplierDiv.appendChild(perDayInput);
+                        multiplierDiv.appendChild(extraLabel);
+                        multiplierDiv.appendChild(extraInput);
+                    }
+                    
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = 'multiplier-toggle';
+                    toggleBtn.textContent = item.multiplier ? '×' : '+×';
+                    toggleBtn.title = item.multiplier ? 'Remove multiplier' : 'Add multiplier';
+                    toggleBtn.addEventListener('click', () => toggleMultiplier(category, index));
+                    
+                    multiplierDiv.appendChild(toggleBtn);
+                    itemDiv.appendChild(multiplierDiv);
+                    
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'item-actions';
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn-small btn-danger';
+                    deleteBtn.textContent = '✕';
+                    deleteBtn.addEventListener('click', () => removeItem(category, index));
+                    
+                    actionsDiv.appendChild(deleteBtn);
+                    itemDiv.appendChild(actionsDiv);
                     categoryItems.appendChild(itemDiv);
                 });
                 
                 const addItemDiv = document.createElement('div');
                 addItemDiv.className = 'add-item';
-                addItemDiv.innerHTML = `
-                    <input type="text" placeholder="Add new item..." 
-                           onkeypress="if(event.key==='Enter') addItem('${category}', this)">
-                    <button class="btn btn-primary" onclick="addItem('${category}', this.previousElementSibling)">Add</button>
-                `;
+                
+                const addInput = document.createElement('input');
+                addInput.type = 'text';
+                addInput.placeholder = 'Add new item...';
+                addInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') addItem(category, e.target);
+                });
+                
+                const addBtn = document.createElement('button');
+                addBtn.className = 'btn btn-primary';
+                addBtn.textContent = 'Add';
+                addBtn.addEventListener('click', () => addItem(category, addInput));
+                
+                addItemDiv.appendChild(addInput);
+                addItemDiv.appendChild(addBtn);
                 
                 categoryDiv.appendChild(categoryHeader);
                 categoryDiv.appendChild(categoryItems);
@@ -532,43 +713,96 @@
             updateStats();
         }
 
-        function toggleItem(category, index) {
+        // Utility function to sanitize text input
+        function sanitizeText(text) {
+            if (typeof text !== 'string') return '';
+            return text.trim().replace(/[<>\"']/g, '');
+        }
+
+        // Calculate quantity needed for an item with multiplier
+        function calculateQuantity(item, category) {
+            if (!item.multiplier) return null;
+            const tripDays = parseInt(document.getElementById('tripDays').value) || 2;
+            const perDay = item.multiplier.perDay || 0;
+            const extra = item.multiplier.extra || 0;
+            
+            // For clothing items, subtract 1 day since you wear clothes on travel day
+            let effectiveDays = tripDays;
+            if (category === 'Clothing') {
+                effectiveDays = Math.max(0, tripDays - 1);
+            }
+            
+            return (perDay * effectiveDays) + extra;
+        }
+
+        // Toggle multiplier for an item
+        function toggleMultiplier(category, index) {
             const item = checklistData[category][index];
-            if (typeof item === 'string') {
-                checklistData[category][index] = { text: item, completed: true };
+            if (item.multiplier) {
+                delete item.multiplier;
             } else {
-                item.completed = !item.completed;
+                item.multiplier = { perDay: 1, extra: 0 };
             }
             renderChecklist();
         }
 
-        function updateItemText(category, index, newText) {
+        // Update multiplier values
+        function updateMultiplier(category, index, perDay, extra) {
             const item = checklistData[category][index];
-            if (typeof item === 'string') {
-                checklistData[category][index] = { text: newText, completed: false };
-            } else {
-                item.text = newText;
+            if (item.multiplier) {
+                item.multiplier.perDay = Math.max(0, parseInt(perDay) || 0);
+                item.multiplier.extra = Math.max(0, parseInt(extra) || 0);
+                renderChecklist();
+            }
+        }
+
+        function toggleItem(category, index, isChecked) {
+            if (checklistData[category] && checklistData[category][index]) {
+                checklistData[category][index].completed = isChecked;
+                renderChecklist();
+            }
+        }
+
+        function updateItemText(category, index, newText) {
+            if (checklistData[category] && checklistData[category][index]) {
+                checklistData[category][index].text = sanitizeText(newText);
+                updateStats();
             }
         }
 
         function addItem(category, input) {
-            if (input.value.trim()) {
-                checklistData[category].push({ text: input.value.trim(), completed: false });
+            const text = sanitizeText(input.value);
+            if (text && checklistData[category]) {
+                const newItem = { 
+                    text: text, 
+                    completed: false 
+                    // No multiplier by default - user can add it with the +× button
+                };
+                checklistData[category].push(newItem);
                 input.value = '';
                 renderChecklist();
             }
         }
 
         function removeItem(category, index) {
-            checklistData[category].splice(index, 1);
-            renderChecklist();
+            if (checklistData[category] && checklistData[category][index]) {
+                checklistData[category].splice(index, 1);
+                renderChecklist();
+            }
         }
 
         function addCategory() {
             const categoryName = prompt('Enter category name:');
-            if (categoryName && categoryName.trim()) {
-                checklistData[categoryName.trim()] = [];
-                renderChecklist();
+            if (categoryName) {
+                const trimmedName = sanitizeText(categoryName);
+                if (trimmedName && !checklistData[trimmedName]) {
+                    checklistData[trimmedName] = [];
+                    renderChecklist();
+                } else if (checklistData[trimmedName]) {
+                    alert('Category already exists!');
+                } else {
+                    alert('Please enter a valid category name.');
+                }
             }
         }
 
@@ -584,17 +818,20 @@
             let completed = 0;
             
             Object.values(checklistData).forEach(items => {
-                items.forEach(item => {
-                    total++;
-                    if ((typeof item === 'object' && item.completed) || 
-                        (typeof item === 'string' && item.completed)) {
-                        completed++;
-                    }
-                });
+                if (Array.isArray(items)) {
+                    items.forEach(item => {
+                        if (item && typeof item === 'object') {
+                            total++;
+                            if (item.completed) {
+                                completed++;
+                            }
+                        }
+                    });
+                }
             });
             
             const remaining = total - completed;
-            const progressPercent = total > 0 ? (completed / total) * 100 : 0;
+            const progressPercent = total > 0 ? Math.round((completed / total) * 100) : 0;
             
             document.getElementById('totalItems').textContent = total;
             document.getElementById('completedItems').textContent = completed;
@@ -605,12 +842,23 @@
         function saveList() {
             const listName = prompt('Enter a name for this list:', 'My Packing List');
             if (listName) {
-                savedData[listName] = {
-                    checklist: JSON.parse(JSON.stringify(checklistData)),
-                    startDate: document.getElementById('startDate').value,
-                    tripDays: document.getElementById('tripDays').value
-                };
-                alert(`List "${listName}" saved successfully!`);
+                const trimmedName = sanitizeText(listName);
+                if (trimmedName) {
+                    try {
+                        savedData[trimmedName] = {
+                            checklist: JSON.parse(JSON.stringify(checklistData)),
+                            startDate: document.getElementById('startDate').value,
+                            tripDays: document.getElementById('tripDays').value,
+                            savedDate: new Date().toISOString()
+                        };
+                        alert(`List "${trimmedName}" saved successfully!`);
+                    } catch (error) {
+                        alert('Error saving list. Please try again.');
+                        console.error('Save error:', error);
+                    }
+                } else {
+                    alert('Please enter a valid list name.');
+                }
             }
         }
 
@@ -621,16 +869,44 @@
                 return;
             }
             
-            const listName = prompt(`Choose a list to load:\n${savedLists.join('\n')}`);
-            if (listName && savedData[listName]) {
-                checklistData = JSON.parse(JSON.stringify(savedData[listName].checklist));
-                document.getElementById('startDate').value = savedData[listName].startDate;
-                document.getElementById('tripDays').value = savedData[listName].tripDays;
-                updateTripSummary();
-                renderChecklist();
-                alert(`List "${listName}" loaded successfully!`);
-            } else if (listName) {
-                alert('List not found.');
+            let listOptions = 'Choose a list to load:\n\n';
+            savedLists.forEach((name, index) => {
+                const saveDate = savedData[name].savedDate ? 
+                    new Date(savedData[name].savedDate).toLocaleDateString() : 
+                    'Unknown date';
+                listOptions += `${index + 1}. ${name} (saved: ${saveDate})\n`;
+            });
+            
+            const choice = prompt(listOptions + '\nEnter the number or name of the list:');
+            if (choice) {
+                let selectedList = null;
+                
+                // Try to parse as number first
+                const choiceNum = parseInt(choice);
+                if (!isNaN(choiceNum) && choiceNum >= 1 && choiceNum <= savedLists.length) {
+                    selectedList = savedLists[choiceNum - 1];
+                } else {
+                    // Try to find by name
+                    selectedList = savedLists.find(name => 
+                        name.toLowerCase() === choice.toLowerCase()
+                    );
+                }
+                
+                if (selectedList && savedData[selectedList]) {
+                    try {
+                        checklistData = JSON.parse(JSON.stringify(savedData[selectedList].checklist));
+                        document.getElementById('startDate').value = savedData[selectedList].startDate || '';
+                        document.getElementById('tripDays').value = savedData[selectedList].tripDays || '2';
+                        updateTripSummary();
+                        renderChecklist();
+                        alert(`List "${selectedList}" loaded successfully!`);
+                    } catch (error) {
+                        alert('Error loading list. The data may be corrupted.');
+                        console.error('Load error:', error);
+                    }
+                } else {
+                    alert('List not found. Please check the name or number.');
+                }
             }
         }
 
