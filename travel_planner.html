@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Packing Checklist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .trip-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .trip-details h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .trip-details h3::before {
+            content: "✈️";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #4facfe;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #369ef8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1e7e34;
+            transform: translateY(-2px);
+        }
+
+        .checklist {
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #f0f0f0;
+        }
+
+        .category {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .category:last-child {
+            border-bottom: none;
+        }
+
+        .category-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-items {
+            padding: 10px 20px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .checklist-item.completed {
+            opacity: 0.6;
+        }
+
+        .checklist-item.completed .item-text {
+            text-decoration: line-through;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: #4facfe;
+        }
+
+        .item-text {
+            flex: 1;
+            font-size: 16px;
+            padding: 5px;
+            border: none;
+            background: transparent;
+            cursor: text;
+        }
+
+        .item-text:focus {
+            outline: 2px solid #4facfe;
+            border-radius: 4px;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .checklist-item:hover .item-actions {
+            opacity: 1;
+        }
+
+        .btn-small {
+            padding: 5px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .add-item {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .add-item input {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .add-item input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            background: #e3f2fd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .stats {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ Trip Packing Checklist</h1>
+            <p>Never forget anything important again!</p>
+        </div>
+        
+        <div class="content">
+            <div class="trip-details">
+                <h3>Trip Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="tripDays">Number of Days:</label>
+                        <input type="number" id="tripDays" min="1" max="365" value="2">
+                    </div>
+                </div>
+                <div id="tripSummary" class="trip-summary"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" onclick="saveList()">
+                    💾 Save List
+                </button>
+                <button class="btn btn-secondary" onclick="loadList()">
+                    📂 Load List
+                </button>
+                <button class="btn btn-success" onclick="addCategory()">
+                    ➕ Add Category
+                </button>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="totalItems">0</div>
+                    <div class="stat-label">Total Items</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="completedItems">0</div>
+                    <div class="stat-label">Packed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="remainingItems">0</div>
+                    <div class="stat-label">Remaining</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="checklist" id="checklist"></div>
+        </div>
+    </div>
+
+    <script>
+        // In-memory storage for the checklist data
+        let checklistData = {
+            "Clothing": [
+                "Underwear (per day + extras)",
+                "Socks (per day + extras)",
+                "Shirts/tops",
+                "Pants/shorts",
+                "Pajamas",
+                "Weather-appropriate outerwear",
+                "Comfortable walking shoes",
+                "Dress shoes (if needed)"
+            ],
+            "Toiletries": [
+                "Toothbrush and toothpaste",
+                "Shampoo and conditioner",
+                "Body wash/soap",
+                "Deodorant",
+                "Razor and shaving cream",
+                "Medications",
+                "Sunscreen",
+                "Face wash and moisturizer"
+            ],
+            "Electronics": [
+                "Phone charger",
+                "Camera and charger",
+                "Laptop/tablet and charger",
+                "Power bank",
+                "Headphones",
+                "Travel adapter (if international)",
+                "Cables and dongles"
+            ],
+            "Documents": [
+                "Passport/ID",
+                "Travel tickets",
+                "Hotel confirmations",
+                "Travel insurance documents",
+                "Emergency contact information",
+                "Copies of important documents",
+                "Credit cards and cash"
+            ],
+            "Essentials": [
+                "Luggage/suitcase",
+                "Day pack/purse",
+                "Snacks for travel",
+                "Water bottle",
+                "Entertainment (books, games)",
+                "First aid kit",
+                "Hand sanitizer",
+                "Tissues"
+            ]
+        };
+
+        let savedData = {};
+
+        function initializeDates() {
+            const today = new Date();
+            const startDateInput = document.getElementById('startDate');
+            startDateInput.value = today.toISOString().split('T')[0];
+            updateTripSummary();
+        }
+
+        function updateTripSummary() {
+            const startDate = document.getElementById('startDate').value;
+            const tripDays = document.getElementById('tripDays').value;
+            
+            if (startDate && tripDays) {
+                const start = new Date(startDate);
+                const end = new Date(start);
+                end.setDate(start.getDate() + parseInt(tripDays) - 1);
+                
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const startFormatted = start.toLocaleDateString('en-US', options);
+                const endFormatted = end.toLocaleDateString('en-US', options);
+                
+                document.getElementById('tripSummary').innerHTML = `
+                    <p><strong>Trip Duration:</strong> ${startFormatted} to ${endFormatted} (${tripDays} days)</p>
+                `;
+            }
+        }
+
+        function renderChecklist() {
+            const checklist = document.getElementById('checklist');
+            checklist.innerHTML = '';
+
+            Object.entries(checklistData).forEach(([category, items]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'category-header';
+                categoryHeader.innerHTML = `
+                    <span>📋 ${category}</span>
+                    <button class="btn-small btn-danger" onclick="removeCategory('${category}')">Remove Category</button>
+                `;
+                
+                const categoryItems = document.createElement('div');
+                categoryItems.className = 'category-items';
+                
+                items.forEach((item, index) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'checklist-item';
+                    if (item.completed) {
+                        itemDiv.classList.add('completed');
+                    }
+                    
+                    itemDiv.innerHTML = `
+                        <input type="checkbox" ${item.completed ? 'checked' : ''} 
+                               onchange="toggleItem('${category}', ${index})">
+                        <input type="text" class="item-text" value="${item.text || item}" 
+                               onblur="updateItemText('${category}', ${index}, this.value)"
+                               onkeypress="if(event.key==='Enter') this.blur()">
+                        <div class="item-actions">
+                            <button class="btn-small btn-danger" onclick="removeItem('${category}', ${index})">✕</button>
+                        </div>
+                    `;
+                    
+                    categoryItems.appendChild(itemDiv);
+                });
+                
+                const addItemDiv = document.createElement('div');
+                addItemDiv.className = 'add-item';
+                addItemDiv.innerHTML = `
+                    <input type="text" placeholder="Add new item..." 
+                           onkeypress="if(event.key==='Enter') addItem('${category}', this)">
+                    <button class="btn btn-primary" onclick="addItem('${category}', this.previousElementSibling)">Add</button>
+                `;
+                
+                categoryDiv.appendChild(categoryHeader);
+                categoryDiv.appendChild(categoryItems);
+                categoryDiv.appendChild(addItemDiv);
+                checklist.appendChild(categoryDiv);
+            });
+            
+            updateStats();
+        }
+
+        function toggleItem(category, index) {
+            const item = checklistData[category][index];
+            if (typeof item === 'string') {
+                checklistData[category][index] = { text: item, completed: true };
+            } else {
+                item.completed = !item.completed;
+            }
+            renderChecklist();
+        }
+
+        function updateItemText(category, index, newText) {
+            const item = checklistData[category][index];
+            if (typeof item === 'string') {
+                checklistData[category][index] = { text: newText, completed: false };
+            } else {
+                item.text = newText;
+            }
+        }
+
+        function addItem(category, input) {
+            if (input.value.trim()) {
+                checklistData[category].push({ text: input.value.trim(), completed: false });
+                input.value = '';
+                renderChecklist();
+            }
+        }
+
+        function removeItem(category, index) {
+            checklistData[category].splice(index, 1);
+            renderChecklist();
+        }
+
+        function addCategory() {
+            const categoryName = prompt('Enter category name:');
+            if (categoryName && categoryName.trim()) {
+                checklistData[categoryName.trim()] = [];
+                renderChecklist();
+            }
+        }
+
+        function removeCategory(category) {
+            if (confirm(`Are you sure you want to remove the "${category}" category?`)) {
+                delete checklistData[category];
+                renderChecklist();
+            }
+        }
+
+        function updateStats() {
+            let total = 0;
+            let completed = 0;
+            
+            Object.values(checklistData).forEach(items => {
+                items.forEach(item => {
+                    total++;
+                    if ((typeof item === 'object' && item.completed) || 
+                        (typeof item === 'string' && item.completed)) {
+                        completed++;
+                    }
+                });
+            });
+            
+            const remaining = total - completed;
+            const progressPercent = total > 0 ? (completed / total) * 100 : 0;
+            
+            document.getElementById('totalItems').textContent = total;
+            document.getElementById('completedItems').textContent = completed;
+            document.getElementById('remainingItems').textContent = remaining;
+            document.getElementById('progressFill').style.width = progressPercent + '%';
+        }
+
+        function saveList() {
+            const listName = prompt('Enter a name for this list:', 'My Packing List');
+            if (listName) {
+                savedData[listName] = {
+                    checklist: JSON.parse(JSON.stringify(checklistData)),
+                    startDate: document.getElementById('startDate').value,
+                    tripDays: document.getElementById('tripDays').value
+                };
+                alert(`List "${listName}" saved successfully!`);
+            }
+        }
+
+        function loadList() {
+            const savedLists = Object.keys(savedData);
+            if (savedLists.length === 0) {
+                alert('No saved lists found. Please save a list first.');
+                return;
+            }
+            
+            const listName = prompt(`Choose a list to load:\n${savedLists.join('\n')}`);
+            if (listName && savedData[listName]) {
+                checklistData = JSON.parse(JSON.stringify(savedData[listName].checklist));
+                document.getElementById('startDate').value = savedData[listName].startDate;
+                document.getElementById('tripDays').value = savedData[listName].tripDays;
+                updateTripSummary();
+                renderChecklist();
+                alert(`List "${listName}" loaded successfully!`);
+            } else if (listName) {
+                alert('List not found.');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('startDate').addEventListener('change', updateTripSummary);
+        document.getElementById('tripDays').addEventListener('change', updateTripSummary);
+
+        // Initialize the app
+        initializeDates();
+        renderChecklist();
+    </script>
+</body>
+</html>
