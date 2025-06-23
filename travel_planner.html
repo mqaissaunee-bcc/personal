@@ -108,6 +108,7 @@
             gap: 10px;
             margin-bottom: 30px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
@@ -422,14 +423,20 @@
             </div>
 
             <div class="controls">
-                <button class="btn btn-primary" onclick="saveList()">
+                <button class="btn btn-primary" id="saveBtn">
                     💾 Save List
                 </button>
-                <button class="btn btn-secondary" onclick="loadList()">
+                <button class="btn btn-secondary" id="loadBtn">
                     📂 Load List
                 </button>
-                <button class="btn btn-success" onclick="addCategory()">
+                <button class="btn btn-success" id="addCategoryBtn">
                     ➕ Add Category
+                </button>
+                <button class="btn btn-secondary" id="exportBtn">
+                    📤 Export List
+                </button>
+                <button class="btn btn-secondary" id="importBtn">
+                    📥 Import List
                 </button>
             </div>
 
@@ -908,6 +915,159 @@
                     alert('List not found. Please check the name or number.');
                 }
             }
+        }
+
+        function exportList() {
+            const exportOptions = [
+                'JSON (for reimporting)',
+                'Readable Text (for sharing/printing)',
+                'Cancel'
+            ];
+            
+            const choice = prompt(`Choose export format:\n\n1. ${exportOptions[0]}\n2. ${exportOptions[1]}\n3. ${exportOptions[2]}\n\nEnter 1, 2, or 3:`);
+            
+            if (choice === '1') {
+                exportAsJSON();
+            } else if (choice === '2') {
+                exportAsText();
+            }
+        }
+
+        function exportAsJSON() {
+            try {
+                const exportData = {
+                    checklist: checklistData,
+                    startDate: document.getElementById('startDate').value,
+                    tripDays: document.getElementById('tripDays').value,
+                    exportDate: new Date().toISOString(),
+                    version: '1.0'
+                };
+                
+                const jsonString = JSON.stringify(exportData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `packing-list-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                alert('List exported as JSON file! You can reimport this file later.');
+            } catch (error) {
+                alert('Error exporting list. Please try again.');
+                console.error('Export error:', error);
+            }
+        }
+
+        function exportAsText() {
+            try {
+                const startDate = document.getElementById('startDate').value;
+                const tripDays = document.getElementById('tripDays').value;
+                const exportDate = new Date().toLocaleDateString();
+                
+                let textContent = `🧳 PACKING CHECKLIST\n`;
+                textContent += `===============================\n\n`;
+                
+                if (startDate && tripDays) {
+                    const [year, month, day] = startDate.split('-').map(num => parseInt(num));
+                    const start = new Date(year, month - 1, day);
+                    const end = new Date(year, month - 1, day + parseInt(tripDays) - 1);
+                    
+                    textContent += `📅 Trip: ${start.toLocaleDateString()} to ${end.toLocaleDateString()}\n`;
+                    textContent += `🗓️  Duration: ${tripDays} days\n`;
+                    textContent += `📤 Exported: ${exportDate}\n\n`;
+                }
+                
+                let totalItems = 0;
+                let completedItems = 0;
+                
+                Object.entries(checklistData).forEach(([category, items]) => {
+                    textContent += `📋 ${category.toUpperCase()}\n`;
+                    textContent += `${'-'.repeat(category.length + 4)}\n`;
+                    
+                    if (category === 'Clothing') {
+                        textContent += `    (Quantities exclude travel day)\n`;
+                    }
+                    
+                    items.forEach(item => {
+                        totalItems++;
+                        const checkbox = item.completed ? '✅' : '☐';
+                        let line = `${checkbox} ${item.text}`;
+                        
+                        if (item.multiplier) {
+                            const quantity = calculateQuantity(item, category);
+                            line += ` (${quantity} needed: ${item.multiplier.perDay}/day + ${item.multiplier.extra} extra)`;
+                        }
+                        
+                        textContent += `${line}\n`;
+                        
+                        if (item.completed) completedItems++;
+                    });
+                    
+                    textContent += `\n`;
+                });
+                
+                const progress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+                textContent += `📊 PROGRESS: ${completedItems}/${totalItems} items packed (${progress}%)\n\n`;
+                textContent += `Generated by Trip Packing Checklist App`;
+                
+                const blob = new Blob([textContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `packing-checklist-${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                alert('List exported as text file! Perfect for printing or sharing.');
+            } catch (error) {
+                alert('Error exporting list. Please try again.');
+                console.error('Export error:', error);
+            }
+        }
+
+        function importList() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const importData = JSON.parse(e.target.result);
+                            
+                            // Validate import data
+                            if (!importData.checklist || !importData.version) {
+                                alert('Invalid file format. Please select a valid packing list JSON file.');
+                                return;
+                            }
+                            
+                            // Confirm import
+                            if (confirm('This will replace your current list. Continue?')) {
+                                checklistData = importData.checklist;
+                                document.getElementById('startDate').value = importData.startDate || '';
+                                document.getElementById('tripDays').value = importData.tripDays || '2';
+                                updateTripSummary();
+                                renderChecklist();
+                                alert('List imported successfully!');
+                            }
+                        } catch (error) {
+                            alert('Error reading file. Please ensure it\'s a valid JSON export.');
+                            console.error('Import error:', error);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
         }
 
         // Event listeners
