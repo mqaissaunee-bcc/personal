@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-fontsize="normal">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Camtasia Mac — Keyboard Shortcuts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   THEME VARIABLES
+   ═══════════════════════════════════════════════ */
+
+/* ── DARK (default) ── */
+[data-theme="dark"] {
+  --bg-deep: #080a10;
+  --bg-base: #0e1019;
+  --bg-card: #151822;
+  --bg-row-a: rgba(255,255,255,0.022);
+  --bg-row-b: transparent;
+  --bg-glass: rgba(14,16,25,0.88);
+  --bg-toolbar: rgba(20,24,36,0.92);
+  --border-subtle: rgba(255,255,255,0.055);
+  --border-medium: rgba(255,255,255,0.09);
+  --text-primary: #e8ecf4;
+  --text-secondary: #8892a8;
+  --text-muted: #4a5268;
+  --text-action: #c8d0de;
+  --accent-teal: #2dd4bf;
+  --accent-blue: #38bdf8;
+  --kbd-bg: rgba(255,255,255,0.065);
+  --kbd-border: rgba(255,255,255,0.1);
+  --kbd-border-b: rgba(255,255,255,0.14);
+  --kbd-text: #e8ecf4;
+  --dropdown-bg: #1a1f2e;
+  --dropdown-shadow: rgba(0,0,0,0.65);
+  --row-active: rgba(255,255,255,0.05);
+  --scrollbar-thumb: rgba(255,255,255,0.08);
+  --a11y-btn: rgba(255,255,255,0.06);
+  --a11y-btn-active: rgba(255,255,255,0.14);
+  --a11y-btn-border: rgba(255,255,255,0.1);
+  --a11y-label: #8892a8;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: dark;
+}
+
+/* ── LIGHT ── */
+[data-theme="light"] {
+  --bg-deep: #f0f2f5;
+  --bg-base: #f5f7fa;
+  --bg-card: #ffffff;
+  --bg-row-a: rgba(0,0,0,0.028);
+  --bg-row-b: transparent;
+  --bg-glass: rgba(245,247,250,0.9);
+  --bg-toolbar: rgba(255,255,255,0.94);
+  --border-subtle: rgba(0,0,0,0.07);
+  --border-medium: rgba(0,0,0,0.12);
+  --text-primary: #1a1d27;
+  --text-secondary: #5a6478;
+  --text-muted: #8b95a8;
+  --text-action: #334155;
+  --accent-teal: #0d9488;
+  --accent-blue: #0284c7;
+  --kbd-bg: rgba(0,0,0,0.06);
+  --kbd-border: rgba(0,0,0,0.13);
+  --kbd-border-b: rgba(0,0,0,0.2);
+  --kbd-text: #1a1d27;
+  --dropdown-bg: #ffffff;
+  --dropdown-shadow: rgba(0,0,0,0.15);
+  --row-active: rgba(0,0,0,0.06);
+  --scrollbar-thumb: rgba(0,0,0,0.1);
+  --a11y-btn: rgba(0,0,0,0.05);
+  --a11y-btn-active: rgba(0,0,0,0.13);
+  --a11y-btn-border: rgba(0,0,0,0.12);
+  --a11y-label: #5a6478;
+  color-scheme: light;
+}
+
+[data-theme="light"] .topbar-brand h1 {
+  background: linear-gradient(135deg, #0d9488, #0369a1) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+}
+[data-theme="light"] .dropdown-item.active { color: #1a1d27; }
+[data-theme="light"] .shortcut-row:active { background: rgba(0,0,0,0.06) !important; }
+
+/* ═══════════════════════════════════════════════
+   FONT SIZE SCALING
+   ═══════════════════════════════════════════════ */
+[data-fontsize="normal"]  { --fs: 1; }
+[data-fontsize="large"]   { --fs: 1.22; }
+[data-fontsize="xlarge"]  { --fs: 1.48; }
+
+/* ═══════════════════════════════════════════════
+   RESET
+   ═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg-deep); color: var(--text-primary);
+  -webkit-font-smoothing: antialiased; touch-action: pan-y;
+  transition: background 0.35s, color 0.35s;
+}
+body { display: flex; flex-direction: column; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════
+   ACCESSIBILITY TOOLBAR
+   ═══════════════════════════════════════════════ */
+.a11y-bar {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 12px; background: var(--bg-glass);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle); flex-shrink: 0;
+  transition: background 0.35s, border-color 0.35s;
+}
+
+.a11y-group {
+  display: flex; align-items: center; gap: 3px;
+  background: var(--a11y-btn); border-radius: 10px;
+  padding: 3px; border: 1px solid var(--a11y-btn-border);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.a11y-group .a11y-label {
+  font-size: calc(10px * var(--fs)); font-weight: 600;
+  color: var(--a11y-label); padding: 0 6px; white-space: nowrap;
+  user-select: none; transition: color 0.3s;
+}
+
+.a11y-btn {
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: 8px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-weight: 700;
+  color: var(--text-secondary); background: transparent;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+  padding: 6px 10px; min-width: 36px; min-height: 34px;
+}
+.a11y-btn:active { transform: scale(0.92); }
+.a11y-btn.active { background: var(--a11y-btn-active); color: var(--text-primary); }
+.a11y-btn svg { width: calc(16px * var(--fs)); height: calc(16px * var(--fs)); flex-shrink: 0; }
+
+.a11y-divider {
+  width: 1px; height: 24px; background: var(--border-subtle);
+  margin: 0 4px; flex-shrink: 0; transition: background 0.3s;
+}
+
+/* ═══════════════════════════════════════════════
+   TOP BAR
+   ═══════════════════════════════════════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 60;
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 12px 16px; flex-shrink: 0;
+  transition: background 0.35s, border-color 0.35s;
+}
+
+.topbar-brand { text-align: center; margin-bottom: 10px; }
+
+.topbar-brand .eyebrow {
+  font-size: calc(10px * var(--fs)); font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--text-muted); transition: color 0.3s;
+}
+
+.topbar-brand h1 {
+  font-size: calc(18px * var(--fs)); font-weight: 800; line-height: 1.2;
+  background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.topbar-brand .edition {
+  font-size: calc(10px * var(--fs)); color: var(--text-muted);
+  font-weight: 500; margin-top: 1px; transition: color 0.3s;
+}
+
+.dropdown-wrap { position: relative; }
+
+.dropdown-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: calc(10px * var(--fs)) 14px; border-radius: 12px;
+  border: 1.5px solid var(--border-medium);
+  background: var(--bg-card); color: var(--text-primary);
+  font: 600 calc(14px * var(--fs))/1.3 'DM Sans', sans-serif;
+  cursor: pointer; transition: border-color 0.2s, background 0.35s, color 0.35s;
+}
+.dropdown-btn:active { background: var(--row-active); }
+.dropdown-btn .sec-icon { font-size: calc(16px * var(--fs)); margin-right: 8px; }
+.dropdown-btn .sec-count { font-size: calc(11px * var(--fs)); color: var(--text-muted); font-weight: 500; margin-left: 6px; }
+.dropdown-btn .chevron { width: calc(16px * var(--fs)); height: calc(16px * var(--fs)); transition: transform 0.25s; color: var(--text-secondary); }
+.dropdown-btn.open .chevron { transform: rotate(180deg); }
+
+.dropdown-menu {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 100;
+  background: var(--dropdown-bg); border-radius: 14px;
+  border: 1px solid var(--border-medium);
+  box-shadow: 0 24px 64px var(--dropdown-shadow);
+  max-height: 50dvh; overflow-y: auto; padding: 5px;
+  display: none; animation: ddFadeIn 150ms ease-out;
+  transition: background 0.35s, border-color 0.35s;
+}
+.dropdown-menu.show { display: block; }
+
+@keyframes ddFadeIn {
+  from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.dropdown-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: calc(11px * var(--fs)) 12px; border-radius: 10px; border: none;
+  background: transparent; color: var(--text-secondary);
+  font: 500 calc(13.5px * var(--fs))/1.3 'DM Sans', sans-serif;
+  cursor: pointer; text-align: left; transition: background 0.15s, color 0.3s;
+}
+.dropdown-item:active { background: var(--row-active); }
+.dropdown-item.active { color: var(--text-primary); font-weight: 700; }
+.dropdown-item .di-icon { font-size: calc(15px * var(--fs)); width: 24px; text-align: center; flex-shrink: 0; }
+.dropdown-item .di-label { flex: 1; }
+.dropdown-item .di-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.dropdown-item .di-count { font-size: calc(11px * var(--fs)); color: var(--text-muted); font-weight: 500; }
+
+/* ═══════════════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════════════ */
+.main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 0 0 110px 0; -webkit-overflow-scrolling: touch; }
+.card-wrapper { padding: 16px 16px 0; will-change: transform, opacity; }
+
+.card-wrapper.exit-left   { animation: exitL 160ms ease-in forwards; }
+.card-wrapper.exit-right  { animation: exitR 160ms ease-in forwards; }
+.card-wrapper.enter-left  { animation: enterL 200ms ease-out forwards; }
+.card-wrapper.enter-right { animation: enterR 200ms ease-out forwards; }
+
+@keyframes exitL  { to { transform: translateX(-28%); opacity: 0; } }
+@keyframes exitR  { to { transform: translateX(28%); opacity: 0; } }
+@keyframes enterL { from { transform: translateX(28%); opacity: 0; } }
+@keyframes enterR { from { transform: translateX(-28%); opacity: 0; } }
+
+.color-strip { height: 3px; border-radius: 2px; margin-bottom: 14px; }
+
+.shortcut-row {
+  display: flex; align-items: center; gap: calc(10px * var(--fs));
+  padding: calc(12px * var(--fs)) calc(10px * var(--fs));
+  border-radius: 10px; transition: background 0.12s;
+}
+.shortcut-row:active { background: var(--row-active) !important; }
+.shortcut-row:nth-child(odd) { background: var(--bg-row-a); }
+
+.shortcut-row .fav-btn {
+  background: none; border: none; padding: 3px; cursor: pointer;
+  flex-shrink: 0; display: flex; align-items: center;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.shortcut-row .fav-btn:active { transform: scale(1.35); }
+.shortcut-row .fav-btn svg { width: calc(18px * var(--fs)); height: calc(18px * var(--fs)); }
+
+.shortcut-row .origin-icon { font-size: calc(13px * var(--fs)); opacity: 0.55; flex-shrink: 0; }
+
+.shortcut-row .action-label {
+  flex: 1; font-size: calc(14px * var(--fs)); font-weight: 500;
+  color: var(--text-action); line-height: 1.4; transition: color 0.3s;
+}
+
+.shortcut-row .keys { display: flex; gap: 3px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+
+.key-cap {
+  display: inline-block; background: var(--kbd-bg);
+  border: 1px solid var(--kbd-border); border-bottom: 2px solid var(--kbd-border-b);
+  border-radius: 6px; padding: calc(4px * var(--fs)) calc(8px * var(--fs));
+  font: 700 calc(12px * var(--fs))/1.3 'JetBrains Mono', monospace;
+  color: var(--kbd-text); white-space: nowrap;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.empty-fav { text-align: center; padding: 56px 28px; color: var(--text-muted); }
+.empty-fav .big-icon { font-size: calc(44px * var(--fs)); margin-bottom: 14px; opacity: 0.4; }
+.empty-fav h3 { font-size: calc(15px * var(--fs)); font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
+.empty-fav p { font-size: calc(13px * var(--fs)); line-height: 1.6; max-width: 260px; margin: 0 auto; }
+
+/* ═══════════════════════════════════════════════
+   BOTTOM NAV
+   ═══════════════════════════════════════════════ */
+.bottombar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+  background: var(--bg-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-subtle);
+  padding: 10px 20px calc(10px + var(--safe-bottom)) 20px;
+  transition: background 0.35s, border-color 0.35s;
+}
+.bottombar-inner { display: flex; align-items: center; justify-content: space-between; max-width: 420px; margin: 0 auto; }
+
+.nav-arrow {
+  width: 42px; height: 42px; border-radius: 12px;
+  border: 1px solid var(--border-medium); background: var(--a11y-btn);
+  color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.12s, background 0.2s, color 0.3s, border-color 0.3s;
+}
+.nav-arrow:active { transform: scale(0.9); background: var(--row-active); }
+.nav-arrow.disabled { color: var(--text-muted); opacity: 0.35; pointer-events: none; }
+.nav-arrow svg { width: 20px; height: 20px; }
+
+.dots { display: flex; gap: 5px; align-items: center; justify-content: center; flex-wrap: wrap; max-width: 230px; }
+.dot {
+  width: 7px; height: 7px; border-radius: 4px; border: none; padding: 0;
+  cursor: pointer; background: var(--border-medium);
+  transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.25s;
+}
+.dot.active { width: 20px; }
+
+.bottombar .hint {
+  text-align: center; font-size: calc(10px * var(--fs));
+  color: var(--text-muted); font-weight: 500; margin-top: 6px; transition: color 0.3s;
+}
+
+.backdrop { display: none; position: fixed; inset: 0; z-index: 55; background: rgba(0,0,0,0.3); }
+.backdrop.show { display: block; }
+
+/* ═══════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .card-wrapper.exit-left, .card-wrapper.exit-right,
+  .card-wrapper.enter-left, .card-wrapper.enter-right { animation: none !important; }
+  .dot, .fav-btn, .nav-arrow, .a11y-btn { transition: none !important; }
+}
+
+@media (min-width: 600px) {
+  .topbar, .bottombar, .a11y-bar { padding-left: 24px; padding-right: 24px; }
+  .card-wrapper { padding-left: 24px; padding-right: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ ACCESSIBILITY BAR ═══ -->
+<div class="a11y-bar" role="toolbar" aria-label="Accessibility controls">
+  <div class="a11y-group" role="radiogroup" aria-label="Color theme">
+    <span class="a11y-label">Theme</span>
+    <button class="a11y-btn active" id="themeDark" role="radio" aria-checked="true" aria-label="Dark mode" title="Dark mode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="a11y-btn" id="themeLight" role="radio" aria-checked="false" aria-label="Light mode" title="Light mode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+  <div class="a11y-divider"></div>
+  <div class="a11y-group" role="radiogroup" aria-label="Font size">
+    <span class="a11y-label">Size</span>
+    <button class="a11y-btn active" id="fsNormal" role="radio" aria-checked="true" aria-label="Normal font size" title="Normal text"><span style="font-size:calc(11px * var(--fs))">A</span></button>
+    <button class="a11y-btn" id="fsLarge" role="radio" aria-checked="false" aria-label="Large font size" title="Large text"><span style="font-size:calc(15px * var(--fs))">A</span></button>
+    <button class="a11y-btn" id="fsXLarge" role="radio" aria-checked="false" aria-label="Extra large font size" title="Extra large text"><span style="font-size:calc(19px * var(--fs))">A</span></button>
+  </div>
+</div>
+
+<!-- ═══ TOP BAR ═══ -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="eyebrow">Camtasia for Mac</div>
+    <h1>Keyboard Shortcuts</h1>
+    <div class="edition">2025 / 2026&ensp;·&ensp;⌘ Cmd&ensp;⇧ Shift&ensp;⌥ Opt&ensp;⌃ Ctrl</div>
+  </div>
+  <div class="dropdown-wrap" id="dropdownWrap">
+    <button class="dropdown-btn" id="dropdownBtn" aria-haspopup="listbox" aria-expanded="false">
+      <span><span class="sec-icon" id="btnIcon">⭐</span><span id="btnLabel">My Favorites</span><span class="sec-count" id="btnCount">(0)</span></span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="dropdown-menu" id="dropdownMenu" role="listbox"></div>
+  </div>
+</header>
+
+<div class="backdrop" id="backdrop"></div>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main" id="main">
+  <div class="card-wrapper" id="card"></div>
+</main>
+
+<!-- ═══ BOTTOM NAV ═══ -->
+<nav class="bottombar" aria-label="Section navigation">
+  <div class="bottombar-inner">
+    <button class="nav-arrow" id="prevBtn" aria-label="Previous section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="dots" id="dots" role="tablist" aria-label="Sections"></div>
+    <button class="nav-arrow" id="nextBtn" aria-label="Next section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+  <div class="hint">Swipe left / right&ensp;·&ensp;Tap ⭐ to favorite</div>
+</nav>
+
+<script>
+/* ═══════════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════════ */
+var SECTIONS=[
+{id:"favorites",icon:"\u2B50",title:"My Favorites",color:"#fbbf24",shortcuts:[]},
+{id:"recording",icon:"\uD83D\uDD34",title:"Recording",color:"#ef4444",shortcuts:[
+["Start / Pause Recording","\u2318 \u21E7 2"],["Stop Recording","\u2318 \u2325 2"],["New Recording","\u2318 \u21E7 N"],["Add Marker","\u2318 M"],["Toggle ScreenDraw","\u2318 \u21E7 D"]]},
+{id:"project",icon:"\uD83D\uDCC1",title:"Project & File",color:"#f97316",shortcuts:[
+["New Project","\u2318 N"],["Open Project","\u2318 O"],["Save","\u2318 S"],["Save As","\u2318 \u21E7 S"],["Import Media","\u2318 I"],["Export / Share","\u2318 E"],["Advanced Export","\u2318 \u21E7 E"],["Preferences","\u2318 ,"]]},
+{id:"editing",icon:"\u2702\uFE0F",title:"General Editing",color:"#eab308",shortcuts:[
+["Undo","\u2318 Z"],["Redo","\u2318 \u21E7 Z"],["Cut","\u2318 X"],["Copy","\u2318 C"],["Paste","\u2318 V"],["Delete","\u232B"],["Ripple Delete","\u2318 \u232B"],["Ripple Cut","\u2318 \u21E7 X"],["Select All","\u2318 A"],["Deselect All","\u2318 \u21E7 A"],["Copy Properties","\u2318 \u21E7 C"],["Paste Properties","\u2318 \u21E7 V"],["Split Selected at Playhead","\u2318 T"],["Split All at Playhead","\u2318 \u21E7 T"],["Stitch Selected Media","\u2318 \u2325 I"]]},
+{id:"playback",icon:"\u25B6\uFE0F",title:"Playback & Navigation",color:"#22c55e",shortcuts:[
+["Play / Pause","Space"],["Rewind to Start","Return"],["Jump to Beginning","\u2318 Return"],["Jump to End","\u2318 \u2303 E"],["Jump to Next Edit","\u2303 ."],["Jump to Previous Edit","\u2303 ,"],["Jump Forward 15 Frames","\u2303 \u21E7 ."],["Jump Backward 15 Frames","\u2303 \u21E7 ,"],["Select Preceding Media","\u2325 \u2190"],["Select Succeeding Media","\u2325 \u2192"],["Enable / Disable Snapping","\u2318 ;"]]},
+{id:"zoom",icon:"\uD83D\uDD0D",title:"Timeline Zoom & Tracks",color:"#06b6d4",shortcuts:[
+["Zoom In on Timeline","\u2318 \u21E7 ="],["Zoom Out on Timeline","\u2318 \u21E7 -"],["Zoom to Fit","\u2318 \u21E7 0"],["Zoom to Max","\u2318 \u21E7 9"],["Increase Track Height","\u2325 ="],["Decrease Track Height","\u2325 -"],["Show Assets Panel","\u2318 1"],["Show Properties Panel","\u2318 2"],["Show / Hide Marker Track","\u2303 M"]]},
+{id:"markers",icon:"\uD83D\uDCCC",title:"Markers & Keyframes",color:"#8b5cf6",shortcuts:[
+["Add Marker","\u2325 M"],["Add Marker to Media","\u2303 \u2325 M"],["Jump to First Marker","\u2325 \u21E7 ,"],["Jump to Last Marker","\u2325 \u21E7 ."],["Jump to Next Marker","\u2303 \u2325 ."],["Jump to Previous Marker","\u2303 \u2325 ,"],["Jump to Next Keyframe","\u2325 K"],["Jump to Previous Keyframe","\u21E7 K"]]},
+{id:"canvas",icon:"\uD83D\uDDBC\uFE0F",title:"Canvas",color:"#ec4899",shortcuts:[
+["Zoom In","\u2318 ="],["Zoom Out","\u2318 -"],["Zoom to Fit","\u2318 0"],["Zoom to 100%","\u2325 Z"],["Pan Canvas","Space + Drag"],["Disable Aspect Ratio Snap","\u21E7 hold"],["Toggle Crop Mode","\u2325 hold"],["Resize from Center","\u2303 hold"],["Nudge Asset","Arrow Keys"]]},
+{id:"animations",icon:"\u2728",title:"Animations & Effects",color:"#14b8a6",shortcuts:[
+["Add Custom Animation","\u2325 A"],["Add SmartFocus Animation","\u2303 \u2325 A"]]},
+{id:"text",icon:"\uD83D\uDD24",title:"Text & Annotations",color:"#f59e0b",shortcuts:[
+["Edit Text","\u2325 Return"],["Bold","\u2318 \u21E7 B"],["Italic","\u2318 \u21E7 I"],["Underline","\u2318 \u21E7 U"],["Align Left","\u2318 {"],["Align Center","\u2318 |"],["Align Right","\u2318 }"],["Copy Style","\u2318 \u2325 C"],["Paste Style","\u2318 \u2325 V"],["Show Special Characters","\u2318 \u2325 T"],["Show Text Properties","\u2318 \u2325 F"]]},
+{id:"captions",icon:"\uD83D\uDCAC",title:"Captions",color:"#6366f1",shortcuts:[
+["Next Caption","Tab"],["Previous Caption","\u21E7 Tab"],["Replay Current Caption","Return"]]},
+{id:"screendraw",icon:"\uD83D\uDD8A\uFE0F",title:"ScreenDraw Tools",color:"#d946ef",shortcuts:[
+["Enable ScreenDraw","\u2318 \u21E7 D"],["Frame","F"],["Highlight","H"],["Ellipse","E"],["Pen","P"],["Line","L"],["Arrow","A"]]},
+{id:"colors",icon:"\uD83C\uDFA8",title:"ScreenDraw Colors",color:"#e11d48",shortcuts:[
+["Black","K"],["Blue","B"],["Cyan","C"],["Green","G"],["Yellow","Y"],["White","W"],["Magenta","M"],["Red","R"]]}
+];
+
+/* ═══ STATE ═══ */
+var activeIdx=0, animating=false, favorites=[], currentTheme="dark", currentFontSize="normal";
+var PK="camtasia-prefs-v2";
+
+function loadPrefs(){try{var p=JSON.parse(localStorage.getItem(PK)||"{}");favorites=Array.isArray(p.f)?p.f:[];if(p.t==="light"||p.t==="dark")currentTheme=p.t;if(p.s==="normal"||p.s==="large"||p.s==="xlarge")currentFontSize=p.s;}catch(e){favorites=[];}}
+function savePrefs(){try{localStorage.setItem(PK,JSON.stringify({f:favorites,t:currentTheme,s:currentFontSize}));}catch(e){}}
+function isFav(sid,act){return favorites.indexOf(sid+"::"+act)!==-1;}
+function toggleFav(sid,act){var k=sid+"::"+act,i=favorites.indexOf(k);if(i===-1)favorites.push(k);else favorites.splice(i,1);savePrefs();renderCard();updateDropdownMenu();updateButton();}
+function getFavShortcuts(){var r=[];favorites.forEach(function(k){var p=k.split("::");var sid=p[0];var act=p.slice(1).join("::");for(var i=1;i<SECTIONS.length;i++){if(SECTIONS[i].id===sid){for(var j=0;j<SECTIONS[i].shortcuts.length;j++){if(SECTIONS[i].shortcuts[j][0]===act){r.push({action:act,keys:SECTIONS[i].shortcuts[j][1],icon:SECTIONS[i].icon,color:SECTIONS[i].color,sectionId:sid});}}}}});return r;}
+
+/* ═══ DOM ═══ */
+var H=document.documentElement;
+var $c=document.getElementById("card"),$m=document.getElementById("main");
+var $db=document.getElementById("dropdownBtn"),$dm=document.getElementById("dropdownMenu"),$bk=document.getElementById("backdrop");
+var $bi=document.getElementById("btnIcon"),$bl=document.getElementById("btnLabel"),$bc=document.getElementById("btnCount");
+var $dt=document.getElementById("dots"),$pb=document.getElementById("prevBtn"),$nb=document.getElementById("nextBtn");
+
+/* ═══ THEME & SIZE ═══ */
+function applyTheme(t){currentTheme=t;H.setAttribute("data-theme",t);
+document.getElementById("themeDark").classList.toggle("active",t==="dark");
+document.getElementById("themeLight").classList.toggle("active",t==="light");
+document.getElementById("themeDark").setAttribute("aria-checked",t==="dark");
+document.getElementById("themeLight").setAttribute("aria-checked",t==="light");
+savePrefs();}
+
+function applyFS(s){currentFontSize=s;H.setAttribute("data-fontsize",s);
+["Normal","Large","XLarge"].forEach(function(n){var el=document.getElementById("fs"+n);var v=n.toLowerCase()==="xlarge"?"xlarge":n.toLowerCase();el.classList.toggle("active",s===v);el.setAttribute("aria-checked",s===v?"true":"false");});
+savePrefs();}
+
+document.getElementById("themeDark").addEventListener("click",function(){applyTheme("dark");});
+document.getElementById("themeLight").addEventListener("click",function(){applyTheme("light");});
+document.getElementById("fsNormal").addEventListener("click",function(){applyFS("normal");});
+document.getElementById("fsLarge").addEventListener("click",function(){applyFS("large");});
+document.getElementById("fsXLarge").addEventListener("click",function(){applyFS("xlarge");});
+
+/* ═══ HELPERS ═══ */
+function starSVG(f){return '<svg viewBox="0 0 24 24" fill="'+(f?"#fbbf24":"none")+'" stroke="'+(f?"#fbbf24":"currentColor")+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';}
+function keyCaps(s){return s.split(" ").map(function(k){return '<span class="key-cap">'+esc(k)+'</span>';}).join("");}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+/* ═══ RENDER ═══ */
+function renderCard(){
+  var sec=SECTIONS[activeIdx],isF=sec.id==="favorites",fav=isF?getFavShortcuts():[],sc=isF?fav:sec.shortcuts;
+  var h='<div class="color-strip" style="background:linear-gradient(90deg,'+sec.color+','+sec.color+'44)"></div>';
+  if(isF&&fav.length===0){h+='<div class="empty-fav"><div class="big-icon">\u2B50</div><h3>No favorites yet</h3><p>Tap the star icon on any shortcut to add it here for quick access.</p></div>';}
+  else{for(var i=0;i<sc.length;i++){var a,k,oi,si;if(isF){a=sc[i].action;k=sc[i].keys;oi=sc[i].icon;si=sc[i].sectionId;}else{a=sc[i][0];k=sc[i][1];oi=null;si=sec.id;}
+  var st=isFav(si,a);h+='<div class="shortcut-row" role="row">';
+  h+='<button class="fav-btn" data-sid="'+esc(si)+'" data-action="'+esc(a)+'" aria-label="'+(st?'Remove':'Add')+' '+esc(a)+' '+(st?'from':'to')+' favorites">'+starSVG(st)+'</button>';
+  if(isF&&oi)h+='<span class="origin-icon">'+oi+'</span>';
+  h+='<span class="action-label">'+esc(a)+'</span><span class="keys" aria-label="'+esc(k)+'">'+keyCaps(k)+'</span></div>';}}
+  $c.innerHTML=h;$m.scrollTop=0;
+  $c.querySelectorAll(".fav-btn").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();toggleFav(b.dataset.sid,b.dataset.action);});});
+}
+
+function updateButton(){var s=SECTIONS[activeIdx];$bi.textContent=s.icon;$bl.textContent=s.title;if(s.id==="favorites"){$bc.textContent="("+getFavShortcuts().length+")";$bc.style.display="";}else $bc.style.display="none";$db.style.borderColor=s.color+"33";$db.style.background=s.color+"0a";}
+
+function renderDots(){var h="";for(var i=0;i<SECTIONS.length;i++){h+='<button class="dot'+(i===activeIdx?" active":"")+'" data-idx="'+i+'"'+(i===activeIdx?' style="background:'+SECTIONS[i].color+'"':'')+' role="tab" aria-selected="'+(i===activeIdx)+'" aria-label="'+esc(SECTIONS[i].title)+'"></button>';}$dt.innerHTML=h;$dt.querySelectorAll(".dot").forEach(function(d){d.addEventListener("click",function(){navigateTo(parseInt(d.dataset.idx));});});}
+
+function updateDots(){$dt.querySelectorAll(".dot").forEach(function(d,i){if(i===activeIdx){d.classList.add("active");d.style.background=SECTIONS[i].color;d.setAttribute("aria-selected","true");}else{d.classList.remove("active");d.style.background="";d.setAttribute("aria-selected","false");}});}
+
+function updateArrows(){$pb.classList.toggle("disabled",activeIdx===0);$nb.classList.toggle("disabled",activeIdx===SECTIONS.length-1);$pb.setAttribute("aria-disabled",activeIdx===0);$nb.setAttribute("aria-disabled",activeIdx===SECTIONS.length-1);}
+
+function updateDropdownMenu(){var h="";for(var i=0;i<SECTIONS.length;i++){var s=SECTIONS[i];h+='<button class="dropdown-item'+(i===activeIdx?" active":"")+'" data-idx="'+i+'" role="option" aria-selected="'+(i===activeIdx)+'"'+(i===activeIdx?' style="background:'+s.color+'18"':'')+'><span class="di-icon">'+s.icon+'</span><span class="di-label">'+esc(s.title)+'</span>';if(i===activeIdx)h+='<span class="di-dot" style="background:'+s.color+'"></span>';if(s.id==="favorites")h+='<span class="di-count">'+getFavShortcuts().length+'</span>';h+='</button>';}$dm.innerHTML=h;$dm.querySelectorAll(".dropdown-item").forEach(function(it){it.addEventListener("click",function(){navigateTo(parseInt(it.dataset.idx));closeDD();});});}
+
+function openDD(){$dm.classList.add("show");$bk.classList.add("show");$db.classList.add("open");$db.setAttribute("aria-expanded","true");updateDropdownMenu();}
+function closeDD(){$dm.classList.remove("show");$bk.classList.remove("show");$db.classList.remove("open");$db.setAttribute("aria-expanded","false");}
+function toggleDD(){$dm.classList.contains("show")?closeDD():openDD();}
+
+function navigateTo(n){if(n===activeIdx||animating||n<0||n>=SECTIONS.length)return;animating=true;var d=n>activeIdx?"left":"right";$c.classList.remove("enter-left","enter-right","exit-left","exit-right");$c.classList.add(d==="left"?"exit-left":"exit-right");setTimeout(function(){activeIdx=n;renderCard();updateButton();updateDots();updateArrows();$c.classList.remove("exit-left","exit-right");$c.classList.add(d==="left"?"enter-left":"enter-right");setTimeout(function(){$c.classList.remove("enter-left","enter-right");animating=false;},210);},170);}
+
+function goN(){if(activeIdx<SECTIONS.length-1)navigateTo(activeIdx+1);}
+function goP(){if(activeIdx>0)navigateTo(activeIdx-1);}
+
+/* ═══ SWIPE ═══ */
+var tx=0,ty=0,tt=0;
+$m.addEventListener("touchstart",function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY;tt=Date.now();},{passive:true});
+$m.addEventListener("touchend",function(e){var dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty,dt=Date.now()-tt;if(Math.abs(dx)>Math.abs(dy)*1.2&&Math.abs(dx)>50&&dt<450){dx<0?goN():goP();}},{passive:true});
+
+/* ═══ KEYBOARD ═══ */
+document.addEventListener("keydown",function(e){if(e.key==="ArrowLeft")goP();else if(e.key==="ArrowRight")goN();else if(e.key==="Escape")closeDD();});
+
+/* ═══ EVENTS ═══ */
+$db.addEventListener("click",toggleDD);
+$bk.addEventListener("click",closeDD);
+$pb.addEventListener("click",goP);
+$nb.addEventListener("click",goN);
+
+/* ═══ INIT ═══ */
+loadPrefs();applyTheme(currentTheme);applyFS(currentFontSize);renderCard();updateButton();renderDots();updateArrows();
+</script>
+</body>
+</html>
