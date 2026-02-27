@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive confidence-building lessons with 13 daily actions to improve self-confidence">
+    <title>Build Real Confidence - Interactive Lesson</title>
+    <style>
+        :root {
+            --bg-gradient-start: #667eea;
+            --bg-gradient-end: #764ba2;
+            --surface-bg: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --card-bg-start: #3498db;
+            --card-bg-end: #2980b9;
+            --card-completed-start: #27ae60;
+            --card-completed-end: #229954;
+            --progress-bg: #27ae60;
+            --progress-end: #229954;
+            --modal-overlay: rgba(0,0,0,0.5);
+            --border-color: #ecf0f1;
+            --example-bg: #f8f9fa;
+            --notes-bg: #fff9e6;
+            --notes-border: #f39c12;
+            --tip-start: #f39c12;
+            --tip-end: #e67e22;
+            --accent-blue: #3498db;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient-start: #1a1a2e;
+            --bg-gradient-end: #16213e;
+            --surface-bg: #0f1419;
+            --text-primary: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --card-bg-start: #1e3a5f;
+            --card-bg-end: #2c5282;
+            --card-completed-start: #1e5631;
+            --card-completed-end: #2f855a;
+            --progress-bg: #2f855a;
+            --progress-end: #1e5631;
+            --modal-overlay: rgba(0,0,0,0.8);
+            --border-color: #2d3748;
+            --example-bg: #1a202c;
+            --notes-bg: #2d3748;
+            --notes-border: #d69e2e;
+            --tip-start: #d69e2e;
+            --tip-end: #c05621;
+            --accent-blue: #4299e1;
+            --shadow: rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent-blue);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--surface-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px var(--shadow);
+            transition: background 0.3s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            font-style: italic;
+            transition: color 0.3s ease;
+        }
+
+        .theme-toggle-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .theme-toggle-label {
+            color: var(--text-primary);
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--border-color);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-toggle:focus {
+            outline: 3px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: var(--card-bg-start);
+        }
+
+        [data-theme="dark"] .theme-toggle-slider {
+            transform: translateX(30px);
+            background: var(--text-primary);
+        }
+
+        .progress-tracker {
+            background: linear-gradient(135deg, var(--progress-bg), var(--progress-end));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .progress-tracker h3 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: white;
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: var(--progress-bg);
+        }
+
+        .instructions {
+            background: var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .instructions h2 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .instructions p {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .keyboard-shortcuts {
+            background: var(--accent-blue);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+
+        .keyboard-shortcuts h3 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .shortcut-key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 0 3px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .confidence-card {
+            background: linear-gradient(135deg, var(--card-bg-start), var(--card-bg-end));
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confidence-card:hover,
+        .confidence-card:focus {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            outline: none;
+        }
+
+        .confidence-card:focus-visible {
+            outline: 3px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        .confidence-card.completed {
+            background: linear-gradient(135deg, var(--card-completed-start), var(--card-completed-end));
+        }
+
+        .confidence-card.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.3);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confidence-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+        }
+
+        .confidence-card:hover::before {
+            top: -20%;
+            left: -20%;
+        }
+
+        .card-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #f39c12;
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .card-description {
+            font-size: 0.95em;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-overlay);
+            backdrop-filter: blur(5px);
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: var(--surface-bg);
+            margin: 3% auto;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-body-wrapper {
+            padding: 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+            z-index: 10;
+            background: none;
+            border: none;
+            padding: 5px 10px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .close:focus-visible {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        .modal-header {
+            border-bottom: 2px solid var(--accent-blue);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            padding-right: 40px;
+            transition: color 0.3s ease;
+        }
+
+        .modal-subtitle {
+            color: var(--text-secondary);
+            font-style: italic;
+            transition: color 0.3s ease;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        .modal-section p {
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .examples {
+            background: var(--example-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-blue);
+            transition: background 0.3s ease;
+        }
+
+        .examples h4 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .examples ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .examples li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .examples li:last-child {
+            border-bottom: none;
+        }
+
+        .examples li::before {
+            content: "✓";
+            color: var(--progress-bg);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, var(--tip-start), var(--tip-end));
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: background 0.3s ease;
+        }
+
+        .tip-box h4 {
+            margin-bottom: 8px;
+        }
+
+        .modal-navigation {
+            border-top: 1px solid var(--border-color);
+            padding: 20px 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--border-color);
+            border-radius: 0 0 20px 20px;
+            flex-shrink: 0;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-button {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-button:hover:not(:disabled),
+        .nav-button:focus:not(:disabled) {
+            background: var(--card-bg-end);
+            outline: none;
+        }
+
+        .nav-button:focus-visible {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        .nav-button:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .modal-counter {
+            background: var(--surface-bg);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .complete-button {
+            background: var(--progress-bg);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .complete-button:hover,
+        .complete-button:focus {
+            background: var(--progress-end);
+            outline: none;
+        }
+
+        .complete-button:focus-visible {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        .complete-button.completed {
+            background: var(--text-secondary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            background: var(--border-color);
+            color: var(--text-primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover,
+        .action-btn:focus {
+            background: var(--text-secondary);
+            color: white;
+            outline: none;
+        }
+
+        .action-btn:focus-visible {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        .notes-area {
+            background: var(--notes-bg);
+            border: 2px dashed var(--notes-border);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .notes-area h4 {
+            color: var(--tip-start);
+            margin-bottom: 10px;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid var(--notes-border);
+            border-radius: 6px;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 0.9em;
+            resize: vertical;
+            background: var(--surface-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .notes-textarea:focus {
+            outline: 2px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        *:focus-visible {
+            outline: 3px solid var(--accent-blue);
+            outline-offset: 2px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+
+            .modal-body-wrapper {
+                padding: 20px;
+            }
+
+            .modal-navigation {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="container">
+        <div class="header">
+            <h1>Build Real Confidence</h1>
+            <p>Small, Daily Actions To Change How You See Yourself</p>
+        </div>
+
+        <div class="theme-toggle-container">
+            <span class="theme-toggle-label" id="theme-label">Dark Mode</span>
+            <button 
+                class="theme-toggle" 
+                onclick="toggleTheme()" 
+                aria-label="Toggle dark mode"
+                aria-pressed="false"
+                id="theme-toggle"
+                role="switch">
+                <div class="theme-toggle-slider">
+                    <span aria-hidden="true" id="theme-icon">☀️</span>
+                </div>
+            </button>
+        </div>
+
+        <div class="progress-tracker" role="region" aria-labelledby="progress-heading">
+            <h3 id="progress-heading">Your Progress</h3>
+            <div class="progress-bar-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="progress-heading">
+                <div class="progress-bar" id="progressBar">0%</div>
+            </div>
+            <p style="font-size: 0.9em; opacity: 0.9;">
+                <span id="completedCount">0</span> of 13 lessons completed
+            </p>
+        </div>
+
+        <div class="instructions">
+            <h2>How to Use This Lesson</h2>
+            <p>Click on any card below to learn detailed strategies, examples, and practical tips for building confidence through daily actions.</p>
+        </div>
+
+        <div class="keyboard-shortcuts" role="complementary" aria-label="Keyboard shortcuts">
+            <h3>⌨️ Keyboard Shortcuts</h3>
+            <p>
+                <kbd class="shortcut-key">←</kbd> <kbd class="shortcut-key">→</kbd> Navigate between lessons | 
+                <kbd class="shortcut-key">Esc</kbd> Close lesson
+            </p>
+        </div>
+
+        <main id="main-content">
+            <div class="grid" id="cardsGrid" role="list" aria-label="Confidence building lessons">
+                <!-- Cards will be generated by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="confidenceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal()" aria-label="Close lesson">×</button>
+            <div class="modal-body-wrapper" id="modalBody" tabindex="-1"></div>
+            <nav class="modal-navigation" id="modalNav" aria-label="Lesson navigation"></nav>
+        </div>
+    </div>
+
+    <script>
+        let currentModal = 1;
+        const totalModals = 13;
+        let completedLessons = new Set(JSON.parse(localStorage.getItem('completedLessons') || '[]'));
+        let lessonNotes = JSON.parse(localStorage.getItem('lessonNotes') || '{}');
+        let currentTheme = localStorage.getItem('theme') || 'light';
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeButton();
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+            updateThemeButton();
+            announceToScreenReader(currentTheme === 'dark' ? 'Dark mode enabled' : 'Light mode enabled');
+        }
+
+        function updateThemeButton() {
+            const toggle = document.getElementById('theme-toggle');
+            const icon = document.getElementById('theme-icon');
+            const label = document.getElementById('theme-label');
+            
+            if (currentTheme === 'dark') {
+                toggle.setAttribute('aria-pressed', 'true');
+                icon.textContent = '🌙';
+                label.textContent = 'Light Mode';
+            } else {
+                toggle.setAttribute('aria-pressed', 'false');
+                icon.textContent = '☀️';
+                label.textContent = 'Dark Mode';
+            }
+        }
+
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('role', 'status');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.className = 'sr-only';
+            announcement.textContent = message;
+            document.body.appendChild(announcement);
+            setTimeout(() => announcement.remove(), 1000);
+        }
+
+        const cardData = [
+            { number: 1, title: "Start the day with a quick win", description: "You build confidence by proving you can create momentum early" },
+            { number: 2, title: "Wear something that energizes you", description: "Grow confidence by dressing like someone who respects themselves" },
+            { number: 3, title: "Take compliments without disclaimers", description: "Say thanks and let it land, letting yourself feel seen" },
+            { number: 4, title: "Reframe one negative thought", description: "Interrupt the voice that holds you back" },
+            { number: 5, title: "Use confident body language", description: "Your posture teaches your brain how to feel" },
+            { number: 6, title: "Prepare well for important things", description: "Confidence comes from readiness, not luck" },
+            { number: 7, title: "Hold eye contact one second longer", description: "Train your confidence by forcing yourself to stop shrinking" },
+            { number: 8, title: "Speak with more intention", description: "Speak like your words carry weight" },
+            { number: 9, title: "Reach out to someone positive", description: "Surround yourself with people who see - and remind you of - your value" },
+            { number: 10, title: "Practice one skill for 10 minutes", description: "Even short reps build long-term belief when done consistently" },
+            { number: 11, title: "Try something you've never done", description: "Show yourself you can handle the unknown" },
+            { number: 12, title: "Reflect on one personal win", description: "Remind yourself what you're capable of" },
+            { number: 13, title: "End your day with action", description: "Enter the next day with confidence by preparing" }
+        ];
+
+        const lessons = {
+            1: { title: "Start the day with a quick win", subtitle: "Build momentum through early success", content: `<div class="modal-section"><h3>The Psychology Behind Morning Wins</h3><p>Starting your day with a quick win creates psychological momentum. When you accomplish something early, your brain releases dopamine, which motivates you to continue achieving throughout the day. This concept is based on the "progress principle" - small wins compound into larger confidence gains.</p></div><div class="examples"><h4>Quick Win Examples:</h4><ul><li>Make your bed immediately after waking up</li><li>Do 10 push-ups or stretches</li><li>Send that email you've been putting off</li><li>Organize your desk or workspace</li><li>Complete a 5-minute meditation</li><li>Write down three things you're grateful for</li><li>Review and prioritize your daily tasks</li></ul></div><div class="tip-box"><h4>💡 Pro Tip for Students & Faculty:</h4><p>Prepare your "quick win" the night before. Whether it's laying out clothes, preparing coffee, or having your first task ready, removing decision fatigue helps ensure success.</p></div><div class="modal-section"><h3>Implementation Strategy</h3><p>Choose wins that take 5-15 minutes maximum. The goal isn't to accomplish something massive, but to prove to yourself that you can follow through on commitments. Start with the same win for a week to build the habit, then diversify.</p></div>` },
+            2: { title: "Wear something that energizes you", subtitle: "Dress like someone who respects themselves", content: `<div class="modal-section"><h3>The Science of Enclothed Cognition</h3><p>Research shows that what we wear directly affects our psychological state and performance. This phenomenon, called "enclothed cognition," demonstrates that clothing has symbolic meaning that influences our behavior and confidence levels.</p></div><div class="examples"><h4>Energizing Clothing Choices:</h4><ul><li>Your favorite color that makes you feel powerful</li><li>A well-fitted outfit that flatters your body type</li><li>Comfortable yet professional attire</li><li>Accessories that reflect your personality</li><li>Shoes that make you feel grounded and confident</li><li>Fabrics that feel good against your skin</li><li>Clothes that allow for confident movement</li></ul></div><div class="tip-box"><h4>💡 Academic Environment Tips:</h4><p>For students: Even in casual settings, choose clothes that make you feel "put together." For faculty: Your appearance communicates competence and approachability to students and colleagues.</p></div><div class="modal-section"><h3>Beyond Appearance: Internal Alignment</h3><p>The goal isn't to dress for others, but to align your external appearance with your internal sense of self-worth. When you dress with intention, you're sending a message to yourself that you deserve care and respect.</p></div>` },
+            3: { title: "Take compliments without disclaimers", subtitle: "Let positive feedback land and be felt", content: `<div class="modal-section"><h3>Why We Deflect Compliments</h3><p>Most people have been conditioned to deflect praise to appear humble or to avoid seeming arrogant. However, this habit trains your brain to reject positive feedback, making it harder to build genuine self-confidence.</p></div><div class="examples"><h4>Instead of Deflecting, Try:</h4><ul><li>"Thank you, I worked hard on that" instead of "It was nothing"</li><li>"I appreciate that" instead of "You're just being nice"</li><li>"That means a lot" instead of "Anyone could have done it"</li><li>"Thank you for noticing" instead of "I got lucky"</li><li>"I'm glad you think so" instead of "You're too kind"</li><li>"Thank you" with a smile instead of changing the subject</li><li>"I put effort into that" instead of "It's not that good"</li></ul></div><div class="tip-box"><h4>💡 Practice Exercise:</h4><p>For one week, respond to every compliment with just "Thank you" and nothing else. Notice how this feels and how others respond to your gracious acceptance.</p></div><div class="modal-section"><h3>The Ripple Effect</h3><p>When you accept compliments gracefully, you not only boost your own confidence but also encourage others to continue giving positive feedback. This creates a virtuous cycle of recognition and growth.</p></div>` },
+            4: { title: "Reframe one negative thought", subtitle: "Interrupt the voice that holds you back", content: `<div class="modal-section"><h3>Understanding Negative Thought Patterns</h3><p>Our brains are wired to notice problems and threats - it's a survival mechanism. However, this negativity bias can become overwhelming and damage our confidence. Cognitive reframing is a powerful tool to challenge and change these thoughts.</p></div><div class="examples"><h4>Common Reframes:</h4><ul><li>"I'm not good at this" → "I'm learning and improving"</li><li>"I always mess up" → "I'm human and I'm growing from mistakes"</li><li>"They'll think I'm stupid" → "I'm brave for trying something new"</li><li>"I can't do anything right" → "I can identify areas for growth"</li><li>"This is too hard" → "This is challenging and I'm up for it"</li><li>"I'll never succeed" → "Success takes time and practice"</li><li>"I'm not ready" → "I'm ready enough to start"</li></ul></div><div class="tip-box"><h4>💡 The ABCDE Method:</h4><p><strong>A</strong>dversity → <strong>B</strong>elief → <strong>C</strong>onsequence → <strong>D</strong>isputation → <strong>E</strong>nergization. When you face adversity, examine your belief about it, consider the consequences, dispute negative thoughts, and feel the energy from positive reframing.</p></div><div class="modal-section"><h3>Making It a Daily Practice</h3><p>Start by catching just one negative thought per day. Don't try to eliminate all negative thinking - just practice noticing and reframing. The goal is to develop mental flexibility and self-compassion.</p></div>` },
+            5: { title: "Use confident body language", subtitle: "Your posture teaches your brain how to feel", content: `<div class="modal-section"><h3>The Body-Mind Connection</h3><p>Research by Amy Cuddy and others shows that our physical posture directly affects our hormone levels, stress response, and confidence. When you stand tall, your body produces more testosterone and less cortisol, leading to increased confidence and decreased stress.</p></div><div class="examples"><h4>Confident Body Language Elements:</h4><ul><li>Stand tall with shoulders back and down</li><li>Keep your head level, not tilted down</li><li>Make appropriate eye contact during conversations</li><li>Use open gestures - avoid crossing arms</li><li>Take up appropriate space - don't shrink</li><li>Walk with purpose and steady pace</li><li>Keep your hands visible and relaxed</li></ul></div><div class="tip-box"><h4>💡 The 2-Minute Power Pose:</h4><p>Before important meetings or presentations, spend 2 minutes in a power pose (hands on hips, chest out, chin up) in private. This can increase confidence and reduce anxiety before performance situations.</p></div><div class="modal-section"><h3>Classroom and Professional Applications</h3><p>For students: Confident posture can improve participation and performance. For faculty: Your body language affects student engagement and your perceived authority. Practice confident posture during lectures and meetings.</p></div>` },
+            6: { title: "Prepare well for important things", subtitle: "Confidence comes from readiness, not luck", content: `<div class="modal-section"><h3>Preparation as Confidence Building</h3><p>Confidence isn't about feeling fearless - it's about feeling prepared. When you thoroughly prepare for important events, you build genuine confidence based on competence rather than hoping for the best.</p></div><div class="examples"><h4>Preparation Strategies:</h4><ul><li>Research your audience before presentations</li><li>Practice your speech or presentation multiple times</li><li>Prepare thoughtful questions for meetings</li><li>Review materials thoroughly before classes or interviews</li><li>Plan your outfit and logistics in advance</li><li>Anticipate potential challenges and solutions</li><li>Gather all necessary materials the night before</li></ul></div><div class="tip-box"><h4>💡 The 90% Rule:</h4><p>Prepare until you feel 90% ready, then trust yourself with the remaining 10%. Over-preparation can lead to anxiety, while under-preparation undermines confidence. Find your sweet spot.</p></div><div class="modal-section"><h3>From Preparation to Performance</h3><p>Remember that preparation is not about perfection - it's about being ready to handle whatever comes your way. When you've prepared well, you can be present and authentic during the actual event.</p></div>` },
+            7: { title: "Hold eye contact one second longer", subtitle: "Train your confidence by stopping yourself from shrinking", content: `<div class="modal-section"><h3>The Power of Eye Contact</h3><p>Eye contact is one of the most powerful nonverbal behaviors for building confidence and connection. It signals engagement, sincerity, and self-assurance. Many people look away too quickly out of discomfort, missing opportunities to build rapport and confidence.</p></div><div class="examples"><h4>Eye Contact Techniques:</h4><ul><li>Look at someone's eyes when they're speaking to you</li><li>Maintain eye contact when giving compliments</li><li>Look at the cashier when saying "thank you"</li><li>Hold eye contact during handshakes</li><li>Look at your audience when presenting</li><li>Make eye contact when introducing yourself</li><li>Don't look at your phone when someone is talking</li></ul></div><div class="tip-box"><h4>💡 The Triangle Method:</h4><p>If direct eye contact feels too intense, try the triangle method: Look between their eyes and mouth, creating the impression of eye contact while feeling more comfortable yourself.</p></div><div class="modal-section"><h3>Cultural Sensitivity</h3><p>Remember that eye contact norms vary across cultures. The goal is to be appropriately engaged, not to stare or make others uncomfortable. Practice reading social cues and adjusting accordingly.</p></div>` },
+            8: { title: "Speak with more intention", subtitle: "Make your words carry weight", content: `<div class="modal-section"><h3>The Power of Intentional Communication</h3><p>Confident people speak with purpose and conviction. They choose their words carefully, speak at an appropriate pace, and avoid undermining their own statements with uncertain language or excessive qualifiers.</p></div><div class="examples"><h4>Intentional Speaking Techniques:</h4><ul><li>Say "I believe" instead of "I think maybe"</li><li>Use "I will" instead of "I'll try"</li><li>Replace "Sorry, but..." with "I have a different perspective"</li><li>Avoid uptalk (ending statements like questions)</li><li>Pause instead of using filler words (um, uh, like)</li><li>Lower your voice slightly for emphasis</li><li>Speak slowly enough to be clearly understood</li></ul></div><div class="tip-box"><h4>💡 The Power Pause:</h4><p>Before speaking in important conversations, take a brief pause to organize your thoughts. This moment of silence demonstrates confidence and ensures your words have impact.</p></div><div class="modal-section"><h3>Academic and Professional Settings</h3><p>In classrooms and meetings, intentional speaking helps you be heard and respected. Practice stating your ideas clearly and standing behind them, even when others disagree.</p></div>` },
+            9: { title: "Reach out to someone positive", subtitle: "Surround yourself with people who see your value", content: `<div class="modal-section"><h3>The Influence of Your Social Circle</h3><p>The people you interact with regularly have a profound impact on your confidence and self-perception. Positive, supportive relationships provide encouragement, perspective, and remind you of your strengths when you forget them yourself.</p></div><div class="examples"><h4>Ways to Connect with Positive People:</h4><ul><li>Call a friend who always lifts your spirits</li><li>Text someone who believes in your potential</li><li>Schedule coffee with a supportive colleague</li><li>Join groups or clubs with like-minded people</li><li>Attend networking events in your field</li><li>Reach out to a mentor or coach</li><li>Express gratitude to someone who's helped you</li></ul></div><div class="tip-box"><h4>💡 The Energy Audit:</h4><p>Regularly assess how different people make you feel. Spend more time with those who energize and support you, and less time with those who drain or criticize you unnecessarily.</p></div><div class="modal-section"><h3>Being a Positive Influence</h3><p>Remember that this is reciprocal - be the positive person for others too. When you lift others up, you strengthen your own confidence and create a supportive network around you.</p></div>` },
+            10: { title: "Practice one skill for 10 minutes", subtitle: "Build long-term belief through consistent short practice", content: `<div class="modal-section"><h3>The Compound Effect of Daily Practice</h3><p>Small, consistent efforts compound over time to create significant improvements. Ten minutes of daily practice is more effective than occasional long sessions because it builds neural pathways and creates sustainable habits.</p></div><div class="examples"><h4>10-Minute Practice Ideas:</h4><ul><li>Practice a musical instrument or singing</li><li>Work on a new language with apps or flashcards</li><li>Practice public speaking or presentation skills</li><li>Develop writing skills through journaling</li><li>Learn new software or technical skills</li><li>Practice drawing, sketching, or artistic skills</li><li>Work on professional skills like Excel or coding</li></ul></div><div class="tip-box"><h4>💡 The 1% Better Rule:</h4><p>Focus on getting 1% better each day rather than perfect practice. This approach reduces pressure and makes the practice sustainable long-term.</p></div><div class="modal-section"><h3>Tracking Progress</h3><p>Keep a simple log of your daily practice. Seeing your consistency over time builds confidence and motivates continued effort. Celebrate small milestones along the way.</p></div>` },
+            11: { title: "Try something you've never done", subtitle: "Show yourself you can handle the unknown", content: `<div class="modal-section"><h3>Expanding Your Comfort Zone</h3><p>Every time you try something new, you prove to yourself that you can handle uncertainty and learn new things. This builds general confidence that transfers to other areas of your life.</p></div><div class="examples"><h4>New Things to Try:</h4><ul><li>Take a different route to work or school</li><li>Try a new cuisine or restaurant</li><li>Attend a workshop or class in a new subject</li><li>Strike up a conversation with a stranger</li><li>Try a new hobby or recreational activity</li><li>Volunteer for a cause you care about</li><li>Learn a new skill through online tutorials</li></ul></div><div class="tip-box"><h4>💡 Start Small:</h4><p>Choose new experiences that are slightly outside your comfort zone but not overwhelming. The goal is to build confidence, not create anxiety.</p></div><div class="modal-section"><h3>Learning from New Experiences</h3><p>After trying something new, reflect on what you learned about yourself and your capabilities. Even if the experience wasn't perfect, you gained valuable information and proved your adaptability.</p></div>` },
+            12: { title: "Reflect on one personal win", subtitle: "Remind yourself what you're capable of", content: `<div class="modal-section"><h3>The Importance of Recognizing Success</h3><p>Many people focus so heavily on their failures and shortcomings that they forget their successes. Regular reflection on personal wins helps maintain a balanced perspective and builds confidence for future challenges.</p></div><div class="examples"><h4>Types of Personal Wins to Reflect On:</h4><ul><li>A time you overcame a significant challenge</li><li>A project you completed successfully</li><li>A skill you developed through practice</li><li>A relationship you built or improved</li><li>A fear you faced and conquered</li><li>A goal you achieved through persistence</li><li>A moment when you helped someone else</li></ul></div><div class="tip-box"><h4>💡 The Win Journal:</h4><p>Keep a notebook where you record one win each day, no matter how small. Review these entries weekly to remind yourself of your consistent progress and capabilities.</p></div><div class="modal-section"><h3>Mining Your Wins for Insights</h3><p>When reflecting on wins, ask yourself: What strengths did I use? What strategies worked? How did I overcome obstacles? These insights become resources for future challenges.</p></div>` },
+            13: { title: "End your day with action", subtitle: "Enter tomorrow with confidence through preparation", content: `<div class="modal-section"><h3>Setting Tomorrow Up for Success</h3><p>How you end your day significantly impacts how you begin the next one. Taking small actions in the evening creates momentum and reduces morning decision fatigue, allowing you to start with confidence.</p></div><div class="examples"><h4>Evening Preparation Actions:</h4><ul><li>Write down your top 3 priorities for tomorrow</li><li>Prepare your clothes and materials for the next day</li><li>Clear and organize your workspace</li><li>Review your schedule and plan your day</li><li>Set your intention for how you want to feel tomorrow</li><li>Pack your bag or briefcase with everything you need</li><li>Prepare breakfast or lunch for the next day</li></ul></div><div class="tip-box"><h4>💡 The 10-Minute Rule:</h4><p>Spend just 10 minutes each evening preparing for tomorrow. This small investment pays huge dividends in reduced stress and increased confidence the next day.</p></div><div class="modal-section"><h3>Creating Positive Closure</h3><p>End your day by acknowledging what went well and what you learned. This positive closure helps you sleep better and wake up with a more optimistic mindset.</p></div>` }
+        };
+
+        function generateCards() {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = cardData.map(card => `
+                <div class="confidence-card ${completedLessons.has(card.number) ? 'completed' : ''}" 
+                     onclick="openModal(${card.number})" 
+                     onkeydown="handleCardKeydown(event, ${card.number})"
+                     data-lesson="${card.number}"
+                     role="listitem"
+                     tabindex="0"
+                     aria-label="Lesson ${card.number}: ${card.title}. ${completedLessons.has(card.number) ? 'Completed' : 'Not completed'}">
+                    <div class="card-number" aria-hidden="true">${card.number}.</div>
+                    <div class="card-title">${card.title}</div>
+                    <div class="card-description">${card.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function handleCardKeydown(event, lessonNumber) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openModal(lessonNumber);
+            }
+        }
+
+        function updateProgress() {
+            const completed = completedLessons.size;
+            const percentage = Math.round((completed / totalModals) * 100);
+            const progressBar = document.getElementById('progressBar');
+            const progressContainer = progressBar.parentElement;
+            
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+            progressContainer.setAttribute('aria-valuenow', percentage);
+            document.getElementById('completedCount').textContent = completed;
+            
+            announceToScreenReader(`Progress updated: ${completed} of ${totalModals} lessons completed`);
+        }
+
+        function toggleComplete(lessonNumber) {
+            if (completedLessons.has(lessonNumber)) {
+                completedLessons.delete(lessonNumber);
+                announceToScreenReader(`Lesson ${lessonNumber} marked as incomplete`);
+            } else {
+                completedLessons.add(lessonNumber);
+                announceToScreenReader(`Lesson ${lessonNumber} marked as complete`);
+            }
+            localStorage.setItem('completedLessons', JSON.stringify([...completedLessons]));
+            updateProgress();
+            generateCards();
+            openModal(lessonNumber);
+        }
+
+        function saveNotes(lessonNumber) {
+            const textarea = document.getElementById('notesTextarea');
+            lessonNotes[lessonNumber] = textarea.value;
+            localStorage.setItem('lessonNotes', JSON.stringify(lessonNotes));
+            announceToScreenReader('Notes saved successfully');
+        }
+
+        function printLesson() {
+            window.print();
+        }
+
+        function openModal(lessonNumber) {
+            const modal = document.getElementById('confidenceModal');
+            const modalBody = document.getElementById('modalBody');
+            const modalNav = document.getElementById('modalNav');
+            const lesson = lessons[lessonNumber];
+            currentModal = lessonNumber;
+            const isCompleted = completedLessons.has(lessonNumber);
+            const savedNotes = lessonNotes[lessonNumber] || '';
+            
+            modalBody.innerHTML = `
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modal-title">${lesson.title}</h2>
+                    <p class="modal-subtitle">${lesson.subtitle}</p>
+                </div>
+                ${lesson.content}
+                <div class="notes-area">
+                    <h4>📝 Personal Notes & Reflections</h4>
+                    <label for="notesTextarea" class="sr-only">Enter your notes for lesson ${lessonNumber}</label>
+                    <textarea id="notesTextarea" class="notes-textarea" 
+                              placeholder="Write your thoughts, goals, or action steps here..."
+                              aria-label="Personal notes for lesson ${lessonNumber}">${savedNotes}</textarea>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="saveNotes(${lessonNumber})">💾 Save Notes</button>
+                        <button class="action-btn" onclick="printLesson()">🖨️ Print Lesson</button>
+                    </div>
+                </div>
+            `;
+            
+            modalNav.innerHTML = `
+                <button class="complete-button ${isCompleted ? 'completed' : ''}" 
+                        onclick="toggleComplete(${lessonNumber})"
+                        aria-pressed="${isCompleted}">
+                    ${isCompleted ? '✓ Completed' : 'Mark as Complete'}
+                </button>
+                <div class="nav-controls">
+                    <button class="nav-button" onclick="navigateModal(-1)" 
+                            aria-label="Previous lesson">← Previous</button>
+                    <div class="modal-counter" role="status" aria-live="polite">
+                        Lesson ${lessonNumber} of ${totalModals}
+                    </div>
+                    <button class="nav-button" onclick="navigateModal(1)"
+                            aria-label="Next lesson">Next →</button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            setTimeout(() => {
+                modalBody.focus();
+            }, 100);
+            
+            announceToScreenReader(`Opened lesson ${lessonNumber}: ${lesson.title}`);
+        }
+
+        function navigateModal(direction) {
+            let newModal = currentModal + direction;
+            
+            if (newModal > totalModals) {
+                newModal = 1;
+            } else if (newModal < 1) {
+                newModal = totalModals;
+            }
+            
+            openModal(newModal);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('confidenceModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            const card = document.querySelector(`[data-lesson="${currentModal}"]`);
+            if (card) {
+                card.focus();
+            }
+            
+            announceToScreenReader('Lesson closed');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('confidenceModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            const modal = document.getElementById('confidenceModal');
+            const isModalOpen = modal.style.display === 'block';
+            
+            if (isModalOpen) {
+                switch(event.key) {
+                    case 'Escape':
+                        closeModal();
+                        break;
+                    case 'ArrowLeft':
+                        event.preventDefault();
+                        navigateModal(-1);
+                        break;
+                    case 'ArrowRight':
+                        event.preventDefault();
+                        navigateModal(1);
+                        break;
+                }
+            }
+        });
+
+        generateCards();
+        updateProgress();
+    </script>
+</body>
+</html>
